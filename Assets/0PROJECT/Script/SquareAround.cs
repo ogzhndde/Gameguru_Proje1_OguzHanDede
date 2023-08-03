@@ -22,7 +22,7 @@ public abstract class SquareAround : MonoBehaviour
         SearchAroundLoop(ref RightSquare, xOffset: 1, yOffset: 0);
         SearchAroundLoop(ref LeftSquare, xOffset: -1, yOffset: 0);
 
-        AllAroundSquares.AddRange(new List<GameObject> { UpSquare, BottomSquare, RightSquare, LeftSquare });
+        ListUpdate();
     }
 
     void SearchAroundLoop(ref GameObject selectedSquare, int xOffset, int yOffset)
@@ -40,5 +40,13 @@ public abstract class SquareAround : MonoBehaviour
                 break;
             }
         }
+    }
+
+    void ListUpdate()
+    {
+        if (UpSquare != null) AllAroundSquares.Add(UpSquare);
+        if (BottomSquare != null) AllAroundSquares.Add(BottomSquare);
+        if (RightSquare != null) AllAroundSquares.Add(RightSquare);
+        if (LeftSquare != null) AllAroundSquares.Add(LeftSquare);
     }
 }

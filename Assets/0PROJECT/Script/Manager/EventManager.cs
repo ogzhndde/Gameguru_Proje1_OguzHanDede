@@ -7,6 +7,7 @@ public enum GameEvent
     OnGenerateGrid,
     OnSquareSelected,
     OnSquareClear,
+    OnUpdateCount,
 
 
 

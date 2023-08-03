@@ -14,24 +14,29 @@ public class UIManager : InstanceManager<UIManager>
 
     [Header("Definitions")]
     [SerializeField] private TMP_InputField TMPField_GridSize;
+    [SerializeField] private TextMeshProUGUI TMP_MatchCount;
     [SerializeField] private Button BTN_Rebuild;
+
+    [SerializeField] int MatchCount = 0;
 
     private void Awake()
     {
         manager = FindObjectOfType<GameManager>();
         data = manager.data;
+
+        InvokeRepeating(nameof(TextCheck), 0.1f, 0.1f);
     }
 
     private void Start()
     {
 
-
     }
 
-    void Update()
+    void TextCheck()
     {
-
+        TMP_MatchCount.text = "Match Count: " + MatchCount;
     }
+
 
     void ClearGeneratePanel()
     {
@@ -40,7 +45,7 @@ public class UIManager : InstanceManager<UIManager>
 
     //######################################################### BUTTONS ##############################################################
 
-    void ButtonRebuild()
+    public void ButtonRebuild()
     {
         if (TMPField_GridSize.text == "")
         {
@@ -61,25 +66,24 @@ public class UIManager : InstanceManager<UIManager>
     {
         BTN_Rebuild.onClick.AddListener(ButtonRebuild);
 
-        EventManager.AddHandler(GameEvent.OnStart, OnStart);
         EventManager.AddHandler(GameEvent.OnGenerateGrid, OnGenerateGrid);
+        EventManager.AddHandler(GameEvent.OnUpdateCount, OnUpdateCount);
     }
 
     private void OnDisable()
     {
-        EventManager.RemoveHandler(GameEvent.OnStart, OnStart);
         EventManager.RemoveHandler(GameEvent.OnGenerateGrid, OnGenerateGrid);
+        EventManager.RemoveHandler(GameEvent.OnUpdateCount, OnUpdateCount);
     }
-
-    private void OnStart()
-    {
-
-    }
-
 
     private void OnGenerateGrid(object value)
     {
         ClearGeneratePanel();
+    }
+
+    private void OnUpdateCount()
+    {
+        MatchCount++;
     }
 
 }

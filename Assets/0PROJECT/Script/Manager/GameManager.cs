@@ -12,13 +12,6 @@ public class GameManager : InstanceManager<GameManager>
     // [Header("Definitons")]
 
 
-    void Awake()
-    {
-#if !UNITY_EDITOR
-        SaveManager.LoadData(data);
-#endif
-    }
-
     void Start()
     {
         

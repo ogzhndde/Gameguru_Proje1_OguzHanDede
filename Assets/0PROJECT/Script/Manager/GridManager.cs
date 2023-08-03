@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class GridManager : InstanceManager<GridManager>
 {
@@ -12,7 +13,7 @@ public class GridManager : InstanceManager<GridManager>
     [Space]
     [Header("Gridal System Properties")]
     public GameObject squarePrefab;
-    public int gridSize = 4;
+    public int gridSize = 3;
     public float cellSpacing = 0.1f;
 
 
@@ -23,8 +24,8 @@ public class GridManager : InstanceManager<GridManager>
 
     void Start()
     {
-        gridSize = 4;
-        EventManager.Broadcast(GameEvent.OnGenerateGrid, 4); //DEFAULT OLARAK OYUN BASINDA 4 GRID OLUSTURUYOR
+        gridSize = 3;
+        EventManager.Broadcast(GameEvent.OnGenerateGrid, 3); //DEFAULT OLARAK OYUN BASINDA 4 GRID OLUSTURUYOR
     }
 
     void Update()
@@ -59,16 +60,17 @@ public class GridManager : InstanceManager<GridManager>
         {
             for (int y = 0; y < gridSize; y++)
             {
+                //KARELERIMI INSTANTIATE EDIYORUM
                 Vector2 spawnPos = startPos + new Vector2((cellSize.x + cellSpacing) * x, -(cellSize.y + cellSpacing) * y);
                 GameObject square = Instantiate(squarePrefab, transform);
                 square.transform.localPosition = spawnPos;
 
+                //OLUSAN KARELERIN ICERISINE X VE Y DEGERI ATAYIP ISIMLERINI DEGISTIRIYORUM
                 Square spawnedSquare = square.GetComponent<Square>();
                 spawnedSquare.xLocation = x;
                 spawnedSquare.yLocation = y;
 
                 square.name = x.ToString() + y.ToString(); //KAREYI X VE Y'SINE GORE ISIMLENDIRIYORUM
-
 
                 AllGrids.Add(square);
             }
@@ -108,11 +110,31 @@ public class GridManager : InstanceManager<GridManager>
     }
     private void OnSquareSelected(object value)
     {
-        List<GameObject> SelectedSquareLine;
+        var selectedSquare = (GameObject)value;
+        var square = selectedSquare.GetComponent<Square>();
 
-        GameObject selectedSquare = (GameObject)value;
-        Square square = selectedSquare.GetComponent<Square>();
+        List<GameObject> ClearPath = new List<GameObject>(); //TEMIZLENMESI GEREKEN YOL
 
-       
+        ClearPath.Add(selectedSquare);
+
+        ClearPath = ClearPath.Union(square.ReportNeighborhood()).ToList(); //CEVREDEKI SECILILERI DIREKT LISTEME EKLETIYORUM
+
+        for (int i = 0; i < square.ReportNeighborhood().Count; i++)
+        {
+            //IKINCI DALGADAKI YERLERI DE KONTROL ETTIRIP LISTEME EKLIYORUM
+            ClearPath = ClearPath.Union(square.ReportNeighborhood()[i].GetComponent<Square>().ReportNeighborhood()).ToList();
+        }
+
+
+        if (ClearPath.Count >= 3) //KOMSU HALINDEKI EN AZ 3 SECILI KARE VARSA 
+        {
+            foreach (GameObject item in ClearPath)
+            {
+                EventManager.Broadcast(GameEvent.OnSquareClear, item);
+                EventManager.Broadcast(GameEvent.OnPlaySound, "SoundPop");
+            }
+
+            EventManager.Broadcast(GameEvent.OnUpdateCount);
+        }
     }
 }

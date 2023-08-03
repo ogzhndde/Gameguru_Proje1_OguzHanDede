@@ -8,12 +8,15 @@ public class Square : SquareAround
 {
     [Header("Definitions")]
     [SerializeField] private GameObject OBJ_CrossImage;
+    private Animator anim;
 
     public bool _isSquareSelected = false;
 
 
     IEnumerator Start()
     {
+        anim = GetComponent<Animator>();
+        
         yield return new WaitForSeconds(0.1f);
 
         SetAroundTiles();
@@ -30,12 +33,17 @@ public class Square : SquareAround
 
     void CrossCheck()
     {
-        OBJ_CrossImage.SetActive(_isSquareSelected);
+        anim.SetBool("_isSelected", _isSquareSelected);
     }
 
     void SetAroundSelectedSquares()
     {
-        AroundSelectedSquares = AllAroundSquares.Where(item => item.GetComponent<Square>()._isSquareSelected).ToList();
+        AroundSelectedSquares = AllAroundSquares.Where(item => item.GetComponent<Square>()._isSquareSelected && item != null).ToList();
+    }
+
+    public List<GameObject> ReportNeighborhood()
+    {
+        return AroundSelectedSquares;
     }
 
 
