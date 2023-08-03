@@ -6,11 +6,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
 public class UIManager : InstanceManager<UIManager>
 {
     GameManager manager;
-    GameData data;
 
     [Header("Definitions")]
     [SerializeField] private TMP_InputField TMPField_GridSize;
@@ -22,14 +20,13 @@ public class UIManager : InstanceManager<UIManager>
     private void Awake()
     {
         manager = FindObjectOfType<GameManager>();
-        data = manager.data;
 
         InvokeRepeating(nameof(TextCheck), 0.1f, 0.1f);
     }
 
-    private void Start()
+    private void Update()
     {
-
+        KeyboardGridGenerate();
     }
 
     void TextCheck()
@@ -37,11 +34,19 @@ public class UIManager : InstanceManager<UIManager>
         TMP_MatchCount.text = "Match Count: " + MatchCount;
     }
 
-
     void ClearGeneratePanel()
     {
         TMPField_GridSize.text = "";
     }
+
+    void KeyboardGridGenerate()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            ButtonRebuild();
+        }
+    }
+
 
     //######################################################### BUTTONS ##############################################################
 

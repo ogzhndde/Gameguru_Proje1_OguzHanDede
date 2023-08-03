@@ -27,22 +27,28 @@ public class Square : SquareAround
 
     private void OnMouseDown()
     {
+        if(_isSquareSelected) return;
+
         _isSquareSelected = true;
         EventManager.Broadcast(GameEvent.OnSquareSelected, gameObject);
+        EventManager.Broadcast(GameEvent.OnPlaySound, "SoundSelect");
     }
 
     void CrossCheck()
     {
+        //CARPININ AKTIF PASIFLIGINI KONTROL EDIYOR
         anim.SetBool("_isSelected", _isSquareSelected);
     }
 
     void SetAroundSelectedSquares()
     {
+        //KOMSU OLAN HER GRIDDEN SECILI OLANLARI DIGER LISTEYE AKTARIYOR
         AroundSelectedSquares = AllAroundSquares.Where(item => item.GetComponent<Square>()._isSquareSelected && item != null).ToList();
     }
 
     public List<GameObject> ReportNeighborhood()
     {
+        //ISTEDIGIM YERLERDE CAGIRABILMEK ICIN LISTE DONDUREN METHOD
         return AroundSelectedSquares;
     }
 

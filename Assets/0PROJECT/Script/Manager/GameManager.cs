@@ -7,8 +7,6 @@ using System.Linq;
 
 public class GameManager : InstanceManager<GameManager>
 {
-    public GameData data;
-    
     // [Header("Definitons")]
 
 

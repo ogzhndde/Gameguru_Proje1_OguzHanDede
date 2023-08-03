@@ -4,36 +4,23 @@ using UnityEngine;
 using System;
 using System.Linq;
 
+[Serializable]
+public struct GridalSystem
+{
+    public GameObject squarePrefab;
+    public int gridSize;
+    public float cellSpacing;
+}
+
 public class GridManager : InstanceManager<GridManager>
 {
-    GameManager manager;
-
     public List<GameObject> AllGrids = new List<GameObject>();
 
-    [Space]
-    [Header("Gridal System Properties")]
-    public GameObject squarePrefab;
-    public int gridSize = 3;
-    public float cellSpacing = 0.1f;
-
-
-    void Awake()
-    {
-        manager = FindObjectOfType<GameManager>();
-    }
+    public GridalSystem gridalSystem;
 
     void Start()
     {
-        gridSize = 3;
-        EventManager.Broadcast(GameEvent.OnGenerateGrid, 3); //DEFAULT OLARAK OYUN BASINDA 4 GRID OLUSTURUYOR
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            EventManager.Broadcast(GameEvent.OnGenerateGrid, gridSize);
-        }
+        EventManager.Broadcast(GameEvent.OnGenerateGrid, gridalSystem.gridSize); //DEFAULT OLARAK OYUN BASINDA GRID OLUSTURUYOR
     }
 
     void GenerateGrid(int gridSize)
@@ -43,9 +30,9 @@ public class GridManager : InstanceManager<GridManager>
 
         mainCamera.GetComponent<Camera>().orthographicSize = 5f; //KAMERANIN DEFAULT HALINDE GENERATE EDIYORUM
 
-        Vector2 cellSize = squarePrefab.GetComponent<SpriteRenderer>().bounds.size;
-        float gridWidth = (cellSize.x + cellSpacing) * gridSize - cellSpacing;
-        float gridHeight = (cellSize.y + cellSpacing) * gridSize - cellSpacing;
+        Vector2 cellSize = gridalSystem.squarePrefab.GetComponent<SpriteRenderer>().bounds.size;
+        float gridWidth = (cellSize.x + gridalSystem.cellSpacing) * gridSize - gridalSystem.cellSpacing;
+        float gridHeight = (cellSize.y + gridalSystem.cellSpacing) * gridSize - gridalSystem.cellSpacing;
 
         float screenHeight = 2f * mainCamera.orthographicSize;
         float screenWidth = screenHeight * mainCamera.aspect;
@@ -61,8 +48,8 @@ public class GridManager : InstanceManager<GridManager>
             for (int y = 0; y < gridSize; y++)
             {
                 //KARELERIMI INSTANTIATE EDIYORUM
-                Vector2 spawnPos = startPos + new Vector2((cellSize.x + cellSpacing) * x, -(cellSize.y + cellSpacing) * y);
-                GameObject square = Instantiate(squarePrefab, transform);
+                Vector2 spawnPos = startPos + new Vector2((cellSize.x + gridalSystem.cellSpacing) * x, -(cellSize.y + gridalSystem.cellSpacing) * y);
+                GameObject square = Instantiate(gridalSystem.squarePrefab, transform);
                 square.transform.localPosition = spawnPos;
 
                 //OLUSAN KARELERIN ICERISINE X VE Y DEGERI ATAYIP ISIMLERINI DEGISTIRIYORUM
@@ -108,6 +95,7 @@ public class GridManager : InstanceManager<GridManager>
         ClearAllGrids();
         GenerateGrid((int)value);
     }
+
     private void OnSquareSelected(object value)
     {
         var selectedSquare = (GameObject)value;
@@ -125,10 +113,9 @@ public class GridManager : InstanceManager<GridManager>
             ClearPath = ClearPath.Union(square.ReportNeighborhood()[i].GetComponent<Square>().ReportNeighborhood()).ToList();
         }
 
-
         if (ClearPath.Count >= 3) //KOMSU HALINDEKI EN AZ 3 SECILI KARE VARSA 
         {
-            foreach (GameObject item in ClearPath)
+            foreach (var item in ClearPath)
             {
                 EventManager.Broadcast(GameEvent.OnSquareClear, item);
                 EventManager.Broadcast(GameEvent.OnPlaySound, "SoundPop");

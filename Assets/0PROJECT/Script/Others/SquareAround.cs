@@ -16,7 +16,7 @@ public abstract class SquareAround : MonoBehaviour
 
     public void SetAroundTiles()
     {
-
+        //TUM KOMSU KARELERI BU KARE ICERISINE BASLANGICTA TANIMLIYOR
         SearchAroundLoop(ref UpSquare, xOffset: 0, yOffset: -1);
         SearchAroundLoop(ref BottomSquare, xOffset: 0, yOffset: 1);
         SearchAroundLoop(ref RightSquare, xOffset: 1, yOffset: 0);
@@ -28,15 +28,16 @@ public abstract class SquareAround : MonoBehaviour
     void SearchAroundLoop(ref GameObject selectedSquare, int xOffset, int yOffset)
     {
         List<GameObject> AllGrids = GridManager.Instance.AllGrids;
-        int AllGridsCount = AllGrids.Count;
 
-        for (int i = 0; i < AllGridsCount; i++)
+        foreach (var grid in AllGrids)
         {
-            // if (i == GridManager.Instance.gridSize + 1) break; //GRIDIN KOSELERINE ULASTIYSA DONGUYU KIRIYORUM
+            int targetX = xLocation + xOffset;
+            int targetY = yLocation + yOffset;
+            string targetName = targetX.ToString() + targetY.ToString(); //X VE YDEN HEDEF KAREYI TESPIT EDYIORUM
 
-            if (AllGrids[i].name == (xLocation + xOffset).ToString() + (yLocation + yOffset).ToString()) // ISIMLENDIRMELERDEN CEVRESINDEKI KARELERI ALGILATIYORUM
+            if (grid.name == targetName) //CEVRESINDE HEDEF KAREYI BULUYO
             {
-                selectedSquare = AllGrids[i];
+                selectedSquare = grid;
                 break;
             }
         }
@@ -44,6 +45,7 @@ public abstract class SquareAround : MonoBehaviour
 
     void ListUpdate()
     {
+        //CEVREMDEKI TUM GRIDLERI BIR LISTEYE ALIYORUM
         if (UpSquare != null) AllAroundSquares.Add(UpSquare);
         if (BottomSquare != null) AllAroundSquares.Add(BottomSquare);
         if (RightSquare != null) AllAroundSquares.Add(RightSquare);
