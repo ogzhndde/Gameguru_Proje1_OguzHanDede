@@ -7,12 +7,12 @@ public class GridManager : InstanceManager<GridManager>
 {
     GameManager manager;
 
-    [SerializeField] private List<GameObject> AllGrids = new List<GameObject>();
+    public List<GameObject> AllGrids = new List<GameObject>();
 
     [Space]
     [Header("Gridal System Properties")]
     public GameObject squarePrefab;
-    public int gridSize = 3;
+    public int gridSize = 4;
     public float cellSpacing = 0.1f;
 
 
@@ -23,6 +23,7 @@ public class GridManager : InstanceManager<GridManager>
 
     void Start()
     {
+        gridSize = 4;
         EventManager.Broadcast(GameEvent.OnGenerateGrid, 4); //DEFAULT OLARAK OYUN BASINDA 4 GRID OLUSTURUYOR
     }
 
@@ -59,10 +60,17 @@ public class GridManager : InstanceManager<GridManager>
             for (int y = 0; y < gridSize; y++)
             {
                 Vector2 spawnPos = startPos + new Vector2((cellSize.x + cellSpacing) * x, -(cellSize.y + cellSpacing) * y);
-                GameObject gridCell = Instantiate(squarePrefab, transform);
-                gridCell.transform.localPosition = spawnPos;
+                GameObject square = Instantiate(squarePrefab, transform);
+                square.transform.localPosition = spawnPos;
 
-                AllGrids.Add(gridCell);
+                Square spawnedSquare = square.GetComponent<Square>();
+                spawnedSquare.xLocation = x;
+                spawnedSquare.yLocation = y;
+
+                square.name = x.ToString() + y.ToString(); //KAREYI X VE Y'SINE GORE ISIMLENDIRIYORUM
+
+
+                AllGrids.Add(square);
             }
         }
 
@@ -84,16 +92,27 @@ public class GridManager : InstanceManager<GridManager>
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnGenerateGrid, OnGenerateGrid);
+        EventManager.AddHandler(GameEvent.OnSquareSelected, OnSquareSelected);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveHandler(GameEvent.OnGenerateGrid, OnGenerateGrid);
+        EventManager.RemoveHandler(GameEvent.OnSquareSelected, OnSquareSelected);
     }
 
     private void OnGenerateGrid(object value)
     {
         ClearAllGrids();
         GenerateGrid((int)value);
+    }
+    private void OnSquareSelected(object value)
+    {
+        List<GameObject> SelectedSquareLine;
+
+        GameObject selectedSquare = (GameObject)value;
+        Square square = selectedSquare.GetComponent<Square>();
+
+       
     }
 }

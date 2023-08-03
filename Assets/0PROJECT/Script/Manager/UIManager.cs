@@ -13,7 +13,7 @@ public class UIManager : InstanceManager<UIManager>
     GameData data;
 
     [Header("Definitions")]
-    [SerializeField] private TMP_InputField TMP_GridSize;
+    [SerializeField] private TMP_InputField TMPField_GridSize;
     [SerializeField] private Button BTN_Rebuild;
 
     private void Awake()
@@ -35,17 +35,24 @@ public class UIManager : InstanceManager<UIManager>
 
     void ClearGeneratePanel()
     {
-        TMP_GridSize.text = "";
+        TMPField_GridSize.text = "";
     }
 
     //######################################################### BUTTONS ##############################################################
 
     void ButtonRebuild()
     {
-        if (TMP_GridSize.text == "") return;
+        if (TMPField_GridSize.text == "")
+        {
+            TMPField_GridSize.GetComponent<Animator>().SetTrigger("_fieldEmpty");
+            return;
+        }
 
-        int GridSize = int.Parse(TMP_GridSize.text);
+
+        int GridSize = int.Parse(TMPField_GridSize.text);
         EventManager.Broadcast(GameEvent.OnGenerateGrid, GridSize);
+
+        EventManager.Broadcast(GameEvent.OnPlaySound, "SoundClick");
     }
 
     //########################################    EVENTS    ###################################################################

@@ -5,6 +5,8 @@ public enum GameEvent
 {
     OnStart,
     OnGenerateGrid,
+    OnSquareSelected,
+    OnSquareClear,
 
 
 
