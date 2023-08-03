@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,11 +9,12 @@ using UnityEngine.UI;
 
 public class UIManager : InstanceManager<UIManager>
 {
-    public GameManager manager;
-    public GameData data;
+    GameManager manager;
+    GameData data;
 
-    //[Header("Definitions")]
-    public TextMeshProUGUI LevelText;
+    [Header("Definitions")]
+    [SerializeField] private TMP_InputField TMP_GridSize;
+    [SerializeField] private Button BTN_Rebuild;
 
     private void Awake()
     {
@@ -31,26 +33,46 @@ public class UIManager : InstanceManager<UIManager>
 
     }
 
+    void ClearGeneratePanel()
+    {
+        TMP_GridSize.text = "";
+    }
+
     //######################################################### BUTTONS ##############################################################
 
-    void RandomButton()
+    void ButtonRebuild()
     {
+        if (TMP_GridSize.text == "") return;
 
+        int GridSize = int.Parse(TMP_GridSize.text);
+        EventManager.Broadcast(GameEvent.OnGenerateGrid, GridSize);
     }
 
     //########################################    EVENTS    ###################################################################
 
     private void OnEnable()
     {
-        // EventManager.AddHandler(GameEvent.OnStart, OnStart);
+        BTN_Rebuild.onClick.AddListener(ButtonRebuild);
+
+        EventManager.AddHandler(GameEvent.OnStart, OnStart);
+        EventManager.AddHandler(GameEvent.OnGenerateGrid, OnGenerateGrid);
     }
 
     private void OnDisable()
     {
-        // EventManager.RemoveHandler(GameEvent.OnStart, OnStart);
+        EventManager.RemoveHandler(GameEvent.OnStart, OnStart);
+        EventManager.RemoveHandler(GameEvent.OnGenerateGrid, OnGenerateGrid);
+    }
+
+    private void OnStart()
+    {
+
     }
 
 
-
+    private void OnGenerateGrid(object value)
+    {
+        ClearGeneratePanel();
+    }
 
 }
