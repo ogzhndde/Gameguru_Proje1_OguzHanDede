@@ -33,12 +33,6 @@ public class UIManager : InstanceManager<UIManager>
     {
         TMP_MatchCount.text = "Match Count: " + MatchCount;
     }
-
-    void ClearGeneratePanel()
-    {
-        TMPField_GridSize.text = "";
-    }
-
     void KeyboardGridGenerate()
     {
         if (Input.GetKeyDown(KeyCode.Return))
@@ -71,19 +65,12 @@ public class UIManager : InstanceManager<UIManager>
     {
         BTN_Rebuild.onClick.AddListener(ButtonRebuild);
 
-        EventManager.AddHandler(GameEvent.OnGenerateGrid, OnGenerateGrid);
         EventManager.AddHandler(GameEvent.OnUpdateCount, OnUpdateCount);
     }
 
     private void OnDisable()
     {
-        EventManager.RemoveHandler(GameEvent.OnGenerateGrid, OnGenerateGrid);
         EventManager.RemoveHandler(GameEvent.OnUpdateCount, OnUpdateCount);
-    }
-
-    private void OnGenerateGrid(object value)
-    {
-        ClearGeneratePanel();
     }
 
     private void OnUpdateCount()
