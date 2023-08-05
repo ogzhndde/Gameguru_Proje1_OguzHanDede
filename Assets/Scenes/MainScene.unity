@@ -532,10 +532,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 664857495, guid: aaf74449200fbfa4ca1de589f58549d6, type: 3}
-      propertyPath: m_text
-      value: "Enter\nGrid \nSize"
-      objectReference: {fileID: 0}
     - target: {fileID: 2581182579028657418, guid: aaf74449200fbfa4ca1de589f58549d6, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -738,14 +734,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 5016617848388685527, guid: 6ab47e0129ba40d499ebc663e1ebdaf3, type: 3}
-      propertyPath: CursorTexture
-      value: 
-      objectReference: {fileID: 2800000, guid: 8b6bcde38ff597946b894c9917765b7f, type: 3}
-    - target: {fileID: 5016617848388685527, guid: 6ab47e0129ba40d499ebc663e1ebdaf3, type: 3}
-      propertyPath: customCursorTexture
-      value: 
-      objectReference: {fileID: 2800000, guid: 2e71a8202d3b4a3448ec85ced5a40265, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ab47e0129ba40d499ebc663e1ebdaf3, type: 3}
 --- !u!1001 &5288270934424835732
