@@ -109,6 +109,7 @@ MonoBehaviour:
   RightSquare: {fileID: 0}
   LeftSquare: {fileID: 0}
   OBJ_CrossImage: {fileID: 5698660590066650427}
+  anim: {fileID: 755373835540790851}
   _isSquareSelected: 0
 --- !u!65 &7324189215176000497
 BoxCollider:

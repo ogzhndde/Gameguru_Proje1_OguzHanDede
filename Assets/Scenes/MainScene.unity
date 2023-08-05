@@ -734,6 +734,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5016617848388685527, guid: 6ab47e0129ba40d499ebc663e1ebdaf3, type: 3}
+      propertyPath: MaxGridSize
+      value: 25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ab47e0129ba40d499ebc663e1ebdaf3, type: 3}
 --- !u!1001 &5288270934424835732

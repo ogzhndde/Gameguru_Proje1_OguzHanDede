@@ -7,6 +7,7 @@ using System.Linq;
 
 public class GameManager : InstanceManager<GameManager>
 {
+    public int MaxGridSize;
     public Texture2D CursorTexture;
 
     void Start()

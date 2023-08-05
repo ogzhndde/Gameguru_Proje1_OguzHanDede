@@ -43,21 +43,33 @@ public class UIManager : InstanceManager<UIManager>
         }
     }
 
+    void GiveWarning()
+    {
+        TMPField_GridSize.GetComponent<Animator>().SetTrigger("_fieldEmpty");
+    }
+
     //######################################################### BUTTONS ##############################################################
     public void ButtonRebuild()
     {
         //IF THE INPUT FIELD IS EMPTY, RETURN METHOD
         if (TMPField_GridSize.text == "")
         {
-            //WARNING ANIMATION FOR EMPTY FIELD
-            TMPField_GridSize.GetComponent<Animator>().SetTrigger("_fieldEmpty");
+            GiveWarning();
             return;
         }
 
         //TAKE VALUE IN INPUT FIELD AND GENERATE GRID BY VALUE
         int GridSize = int.Parse(TMPField_GridSize.text);
-        EventManager.Broadcast(GameEvent.OnGenerateGrid, GridSize);
 
+        //IF VALUE IS GREATER THAN MAX GRID SIZE VALUE, RETURN METHOD
+        if (GridSize > manager.MaxGridSize)
+        {
+            GiveWarning();
+            TMPField_GridSize.text = "";
+            return;
+        }
+
+        EventManager.Broadcast(GameEvent.OnGenerateGrid, GridSize);
         EventManager.Broadcast(GameEvent.OnPlaySound, "SoundClick");
     }
 

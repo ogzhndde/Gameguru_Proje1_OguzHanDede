@@ -11,14 +11,12 @@ public class Square : SquareAround
 {
     [Header("Definitions")]
     [SerializeField] private GameObject OBJ_CrossImage;
-    private Animator anim;
+    [SerializeField] private Animator anim;
 
     public bool _isSquareSelected = false;
 
     IEnumerator Start()
     {
-        anim = GetComponent<Animator>();
-
         yield return new WaitForSeconds(0.1f);
 
         //DETECT NEIGHBORING SQUARES AROUND IT
