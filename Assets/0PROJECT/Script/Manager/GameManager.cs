@@ -7,19 +7,18 @@ using System.Linq;
 
 public class GameManager : InstanceManager<GameManager>
 {
-    // [Header("Definitons")]
-
+    public Texture2D CursorTexture;
 
     void Start()
     {
-        
+        SetCursor();
     }
 
-    void Update()
+    public void SetCursor()
     {
-
+        //SET NEW CURSOR IMAGE
+        Cursor.SetCursor(CursorTexture, Vector2.zero, CursorMode.ForceSoftware);
     }
-
 
 
     //########################################    EVENTS    ###################################################################

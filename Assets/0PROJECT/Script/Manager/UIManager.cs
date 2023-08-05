@@ -26,6 +26,7 @@ public class UIManager : InstanceManager<UIManager>
 
     private void Update()
     {
+        //GENERATE GRID WITH THE RETURN KEY, NOT JUST WITH THE BUTTON
         KeyboardGridGenerate();
     }
 
@@ -33,6 +34,7 @@ public class UIManager : InstanceManager<UIManager>
     {
         TMP_MatchCount.text = "Match Count: " + MatchCount;
     }
+
     void KeyboardGridGenerate()
     {
         if (Input.GetKeyDown(KeyCode.Return))
@@ -41,18 +43,18 @@ public class UIManager : InstanceManager<UIManager>
         }
     }
 
-
     //######################################################### BUTTONS ##############################################################
-
     public void ButtonRebuild()
     {
+        //IF THE INPUT FIELD IS EMPTY, RETURN METHOD
         if (TMPField_GridSize.text == "")
         {
+            //WARNING ANIMATION FOR EMPTY FIELD
             TMPField_GridSize.GetComponent<Animator>().SetTrigger("_fieldEmpty");
             return;
         }
 
-
+        //TAKE VALUE IN INPUT FIELD AND GENERATE GRID BY VALUE
         int GridSize = int.Parse(TMPField_GridSize.text);
         EventManager.Broadcast(GameEvent.OnGenerateGrid, GridSize);
 
@@ -60,11 +62,12 @@ public class UIManager : InstanceManager<UIManager>
     }
 
     //########################################    EVENTS    ###################################################################
-
     private void OnEnable()
     {
+        //DEFINE BUTTON METHOD
         BTN_Rebuild.onClick.AddListener(ButtonRebuild);
 
+        //EVENTS THAT USING IN UI
         EventManager.AddHandler(GameEvent.OnUpdateCount, OnUpdateCount);
     }
 
@@ -75,7 +78,7 @@ public class UIManager : InstanceManager<UIManager>
 
     private void OnUpdateCount()
     {
+        //UPDATE MATCH COUNT
         MatchCount++;
     }
-
 }

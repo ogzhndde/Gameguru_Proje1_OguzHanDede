@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 
+/*
+DEFINE ALL EVENTS THAT USING IN THE GAME IN THIS ENUM
+*/
 public enum GameEvent
 {
     OnStart,
@@ -8,8 +11,6 @@ public enum GameEvent
     OnSquareSelected,
     OnSquareClear,
     OnUpdateCount,
-
-
 
     //SOUND EVENTS
     OnPlaySound,

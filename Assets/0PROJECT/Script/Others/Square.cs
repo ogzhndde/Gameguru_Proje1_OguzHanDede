@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+/*
+    SCRIPT WORKING ON ALL CREATED SQUARES
+*/
 public class Square : SquareAround
 {
     [Header("Definitions")]
@@ -12,13 +15,13 @@ public class Square : SquareAround
 
     public bool _isSquareSelected = false;
 
-
     IEnumerator Start()
     {
         anim = GetComponent<Animator>();
-        
+
         yield return new WaitForSeconds(0.1f);
 
+        //DETECT NEIGHBORING SQUARES AROUND IT
         SetAroundTiles();
 
         InvokeRepeating(nameof(CrossCheck), 0f, 0.1f);
@@ -27,7 +30,8 @@ public class Square : SquareAround
 
     private void OnMouseDown()
     {
-        if(_isSquareSelected) return;
+        //IF SQUARE IS ALREADY SELECTED, RETURN THE METHOD
+        if (_isSquareSelected) return;
 
         _isSquareSelected = true;
         EventManager.Broadcast(GameEvent.OnSquareSelected, gameObject);
@@ -36,22 +40,21 @@ public class Square : SquareAround
 
     void CrossCheck()
     {
-        //CARPININ AKTIF PASIFLIGINI KONTROL EDIYOR
+        //CHECKING IF THE SQUARE IS SELECTED OR NOT, AND PLAY ANIMATION
         anim.SetBool("_isSelected", _isSquareSelected);
     }
 
     void SetAroundSelectedSquares()
     {
-        //KOMSU OLAN HER GRIDDEN SECILI OLANLARI DIGER LISTEYE AKTARIYOR
+        //SCANNING NEIGHBORS GRIDS AND TAKING SELECTED THINGS TO LIST
         AroundSelectedSquares = AllAroundSquares.Where(item => item.GetComponent<Square>()._isSquareSelected && item != null).ToList();
     }
 
     public List<GameObject> ReportNeighborhood()
     {
-        //ISTEDIGIM YERLERDE CAGIRABILMEK ICIN LISTE DONDUREN METHOD
+        //DETECTS SELECTED NEIGHBORS AND CALLS WHERE NECESSARY
         return AroundSelectedSquares;
     }
-
 
     //########################################    EVENTS    ###################################################################
 
